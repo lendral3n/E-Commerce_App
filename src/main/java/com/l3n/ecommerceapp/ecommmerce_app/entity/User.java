@@ -6,20 +6,23 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
 @Getter
-@AllArgsConstructor
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "users")
 public class User {
     @Id
     private String id;
 
-    @Column(unique = true)
     private String email;
 
     private String password;
 
     private String name;
+
+    public User(String username) {
+        this.id = username;
+    }
 }

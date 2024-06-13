@@ -1,77 +1,50 @@
 package com.l3n.ecommerceapp.ecommmerce_app.controller;
 
-import com.l3n.ecommerceapp.ecommmerce_app.model.*;
-import com.l3n.ecommerceapp.ecommmerce_app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.l3n.ecommerceapp.ecommmerce_app.entity.User;
+import com.l3n.ecommerceapp.ecommmerce_app.model.WebResponse;
+import com.l3n.ecommerceapp.ecommmerce_app.service.UserService;
 
 @RestController
+@RequestMapping("/api")
+@PreAuthorize("isAuthenticated()")
 public class UserController {
 
-    //inject
     @Autowired
     private UserService userService;
 
-    @PostMapping(
-            path = "/users",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public WebResponse<String> add(@RequestBody UserRequest request){
-        userService.Create(request);
+    @GetMapping("/users/{id}")
+    public WebResponse<User> findById(@PathVariable("id") String id) {
+        User user = userService.findById(id);
+        return WebResponse.<User>builder()
+                .message("Profil ditemukan")
+                .data(user)
+                .build();
+    }
+
+    @PutMapping("/users/{id}")
+    public WebResponse<User> update(@RequestBody User user, @PathVariable("id") String id) {
+        User updatedUser = userService.update(user);
+        return WebResponse.<User>builder()
+                .message("Data pengguna berhasil diperbarui")
+                .data(updatedUser)
+                .build();
+    }
+
+    @DeleteMapping("/users/{id}")
+    public WebResponse<String> deleteById(@PathVariable("id") String id) {
+        userService.deleteById(id);
         return WebResponse.<String>builder()
-                .message("success add data")
-                .build();
-    }
-
-
-    @PutMapping(
-            path = "/users/{userId}",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public WebResponse<UserResponse> update(
-            @RequestBody UpdateUserRequest request,
-            @PathVariable("userId") String userId
-    ){
-        // ambil dari url param dan set ke var request
-        request.setId(userId);
-
-        UserResponse userResponse = userService.update(request);
-        return WebResponse.<UserResponse>builder()
-                .message("success update data")
-                .data(userResponse)
-                .build();
-    }
-
-    @DeleteMapping(
-            path = "/users/{userId}",
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public WebResponse<String> delete(
-            @PathVariable("userId") String userId
-    ){
-        userService.delete(userId);
-        return WebResponse.<String>builder()
-                .message("success delete data")
-                .build();
-    }
-
-    @GetMapping(
-            path = "/users/{userId}",
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public WebResponse<UserResponse> getById(
-            @PathVariable("userId") String userId
-    ){
-        UserResponse userResponse = userService.getById(userId);
-        return WebResponse.<UserResponse>builder()
-                .message("success get data")
-                .data(userResponse)
+                .message("Pengguna berhasil dihapus")
                 .build();
     }
 }
