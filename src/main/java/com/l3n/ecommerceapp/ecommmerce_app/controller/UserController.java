@@ -2,9 +2,11 @@ package com.l3n.ecommerceapp.ecommmerce_app.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,17 +24,22 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/users/{id}")
-    public WebResponse<User> findById(@PathVariable("id") String id) {
-        User user = userService.findById(id);
+    @GetMapping("/users/profile")
+    public WebResponse<User> getProfile() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+        User user = userService.findById(username);
         return WebResponse.<User>builder()
                 .message("Profil ditemukan")
                 .data(user)
                 .build();
     }
 
-    @PutMapping("/users/{id}")
-    public WebResponse<User> update(@RequestBody User user, @PathVariable("id") String id) {
+    @PutMapping("/users/profile")
+    public WebResponse<User> updateProfile(@RequestBody User user) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+        user.setId(username); 
         User updatedUser = userService.update(user);
         return WebResponse.<User>builder()
                 .message("Data pengguna berhasil diperbarui")
@@ -40,9 +47,11 @@ public class UserController {
                 .build();
     }
 
-    @DeleteMapping("/users/{id}")
-    public WebResponse<String> deleteById(@PathVariable("id") String id) {
-        userService.deleteById(id);
+    @DeleteMapping("/users/profile")
+    public WebResponse<String> deleteProfile() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+        userService.deleteById(username);
         return WebResponse.<String>builder()
                 .message("Pengguna berhasil dihapus")
                 .build();
