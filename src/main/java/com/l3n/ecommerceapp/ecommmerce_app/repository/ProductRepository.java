@@ -1,8 +1,13 @@
 package com.l3n.ecommerceapp.ecommmerce_app.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import com.l3n.ecommerceapp.ecommmerce_app.entity.Product;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.stereotype.Repository;
 
-public interface ProductRepository extends JpaRepository<Product, String>{
+import java.util.List;
+
+@Repository
+public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
+    List<Product> findByUserId(String userId);
 }
