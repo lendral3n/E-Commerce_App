@@ -72,6 +72,13 @@
 			<artifactId>cloudinary-http44</artifactId>
 			<version>1.29.0</version>
 		</dependency>
+		<!-- Xendit -->
+		 <dependency>
+			<groupId>com.xendit</groupId>
+			<artifactId>xendit-java-lib</artifactId>
+			<version>1.23.0</version>
+		</dependency>
+
 
 
 	</dependencies>

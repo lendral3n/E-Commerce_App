@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -20,14 +21,20 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String number;
-    @Temporal(TemporalType.DATE)
-    private Date date;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
     private String address;
-    private BigDecimal quantity;
     private BigDecimal total;
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateOrder;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> orderItems;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Payment> payments;
 }
