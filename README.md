@@ -291,7 +291,6 @@ Sebelum menjalankan aplikasi, pastikan kamu telah menginstal:
 ```
 
 ## >>>Delete Product<<<
-```
 **Response**
 ```json
 {
