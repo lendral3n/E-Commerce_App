@@ -1,4 +1,6 @@
 # E-Commerce Apps (Java)
+![Screnshot](docs/app1.png)
+![Screnshot](docs/app2.png)
 
 ## Tentang Aplikasi
 Aplikasi E-Commerce ini dirancang untuk memudahkan transaksi jual beli produk secara online. Dibangun dengan menggunakan bahasa pemrograman Java, aplikasi ini menawarkan performa yang cepat dan stabil.
@@ -132,6 +134,7 @@ Sebelum menjalankan aplikasi, pastikan kamu telah menginstal:
 | POST   | /api/products        | Create Product        |
 | GET    | /api/products        | Get All Product       |
 | GET    | /api/products/{id}   | Get Product By Id     |
+| GET    | /api/products/users  | Get Product By user   |
 | PUT    | /api/products/{id}   | Update Product        |
 | DELETE | /api/products/{id}   | Delete Product        |
 
