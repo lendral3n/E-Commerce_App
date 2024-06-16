@@ -38,6 +38,8 @@ public class Payment {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date paymentDate;
-
+    
+    private String invoiceId;
     private String paymentStatus;
+    
 }

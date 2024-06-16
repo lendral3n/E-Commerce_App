@@ -7,7 +7,9 @@ import org.springframework.util.StringUtils;
 import com.l3n.ecommerceapp.ecommmerce_app.entity.User;
 import com.l3n.ecommerceapp.ecommmerce_app.exception.BadRequestException;
 import com.l3n.ecommerceapp.ecommmerce_app.exception.ResourceNotFoundException;
+import com.l3n.ecommerceapp.ecommmerce_app.model.UserProfileResponse;
 import com.l3n.ecommerceapp.ecommmerce_app.repository.UserRepository;
+import com.l3n.ecommerceapp.ecommmerce_app.model.UserProfileResponse;
 
 @Service
 public class UserService {
@@ -16,7 +18,16 @@ public class UserService {
     private UserRepository userRepository;
 
     public User findById(String id) {
-        return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User dengan id " + id + "tidak diteumukan"));
+        return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User dengan id " + id + " tidak ditemukan"));
+    }
+
+    public UserProfileResponse findProfileById(String id) {
+        User user = findById(id);
+        return UserProfileResponse.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .name(user.getName())
+                .build();
     }
 
     public User create(User user) {

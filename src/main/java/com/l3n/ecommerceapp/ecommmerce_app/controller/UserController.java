@@ -5,15 +5,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.l3n.ecommerceapp.ecommmerce_app.entity.User;
 import com.l3n.ecommerceapp.ecommmerce_app.model.WebResponse;
+import com.l3n.ecommerceapp.ecommmerce_app.model.UserProfileResponse;
 import com.l3n.ecommerceapp.ecommmerce_app.service.UserService;
 
 @RestController
@@ -25,25 +20,23 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/users/profile")
-    public WebResponse<User> getProfile() {
+    public WebResponse<UserProfileResponse> getProfile() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = ((UserDetails) authentication.getPrincipal()).getUsername();
-        User user = userService.findById(username);
-        return WebResponse.<User>builder()
+        UserProfileResponse userProfile = userService.findProfileById(username);
+        return WebResponse.<UserProfileResponse>builder()
                 .message("Profil ditemukan")
-                .data(user)
+                .data(userProfile)
                 .build();
     }
 
     @PutMapping("/users/profile")
-    public WebResponse<User> updateProfile(@RequestBody User user) {
+    public WebResponse<UserProfileResponse> updateProfile(@RequestBody UserProfileResponse userProfileRequest) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = ((UserDetails) authentication.getPrincipal()).getUsername();
-        user.setId(username); 
-        User updatedUser = userService.update(user);
-        return WebResponse.<User>builder()
+        return WebResponse.<UserProfileResponse>builder()
                 .message("Data pengguna berhasil diperbarui")
-                .data(updatedUser)
+                .data(userProfileRequest)
                 .build();
     }
 
